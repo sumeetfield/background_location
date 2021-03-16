@@ -66,7 +66,8 @@ class BackgroundLocationPlugin() : MethodCallHandler, PluginRegistry.RequestPerm
                 LocalBroadcastManager.getInstance(registrar.activeContext()).unregisterReceiver(myReceiver!!)
 
                 if (mBound) {
-                    registrar.activeContext().unbindService(mServiceConnection)
+                    registrar.activeContext().stopService(mServiceConnection)
+                    //registrar.activeContext().unbindService(mServiceConnection)
                     mBound = false
                 }
 
@@ -79,7 +80,8 @@ class BackgroundLocationPlugin() : MethodCallHandler, PluginRegistry.RequestPerm
                     val distanceFilter : Double? = call.argument("distance_filter")
                     val intent = Intent(registrar.activeContext(), LocationUpdatesService::class.java);
                     intent.putExtra("distance_filter", distanceFilter)
-                    registrar.activeContext().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE)
+                    registrar.activeContext().startService(intent,mServiceConnection);
+                    //registrar.activeContext().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE)
                 }
 
                 result.success(0);
